@@ -174,7 +174,7 @@ class _ServiceFormState extends State<ServiceForm> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text("Data berhasil disimpan!😆"),
+                                title: Text("Data berhasil disimpan"),
                                 actions: <Widget>[
                                   FlatButton(
                                     child: Text("Tutup"),

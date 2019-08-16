@@ -134,7 +134,7 @@ class __CartTotalState extends State<_CartTotal> {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: Text("Transaksi Berhasil! 😉"),
+                        title: Text("Transaksi Berhasil"),
                         actions: <Widget>[
                           FlatButton(
                             child: Text("Tutup"),

@@ -159,16 +159,7 @@ class __DetailItemState extends State<_DetailItem> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          SizedBox(height: 50),
-          Center(
-            child: Text(
-              'Have a nice day 😀',
-              style: TextStyle(
-                  color: Colors.grey[800],
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
+          SizedBox(height: 55),
           Image.asset('happy.png', fit: BoxFit.cover, width: double.infinity),
           FutureBuilder<List<Item>>(
             future: item.items(),
