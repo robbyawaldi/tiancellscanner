@@ -80,7 +80,8 @@ class __DetailItemState extends State<_DetailItem> {
                     children: <Widget>[
                       Text(
                         item.item.name.toUpperCase(),
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         '${rupiah(item.item.price).formattedLeftSymbol}',
@@ -96,7 +97,8 @@ class __DetailItemState extends State<_DetailItem> {
                         children: <Widget>[
                           Text(
                             'Jumlah',
-                            style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                            style: TextStyle(
+                                fontSize: 14, color: Colors.grey[700]),
                           ),
                           Expanded(
                             child: SizedBox(
@@ -139,9 +141,13 @@ class __DetailItemState extends State<_DetailItem> {
                                     cart.add(item.item, _qty);
                                     item.remove();
                                     setState(() => _qty = 1);
-                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                    Scaffold.of(context).showSnackBar(
+                                      SnackBar(
                                         content: Text(
-                                            'Item berhasil ditambahkan ke keranjang')));
+                                            'Item berhasil ditambahkan ke keranjang'),
+                                        duration: Duration(seconds: 1),
+                                      ),
+                                    );
                                   },
                           ),
                         ],
