@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => Scanner(),
           '/cart': (context) => Cart(),
-          '/service': (context) => Service(),
+          '/service': (context) => FormService(),
         },
       ),
     );

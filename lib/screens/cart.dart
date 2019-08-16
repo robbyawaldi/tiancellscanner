@@ -13,6 +13,7 @@ class Cart extends StatelessWidget {
         backgroundColor: Colors.indigo,
         title: Text('Keranjang'),
       ),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -33,40 +34,51 @@ class _CartList extends StatelessWidget {
     var cart = Provider.of<CartModel>(context);
     List<Sale> sales = cart.sales;
 
-    return ListView.builder(
-      itemCount: cart.sales.length,
-      itemBuilder: (context, index) => Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    sales[index].item.name,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    '${rupiah(sales[index].item.price).formattedLeftSymbol} x ${sales[index].qty}',
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orange),
-                  ),
-                ],
-              ),
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () => cart.remove(sales[index]),
-                color: Colors.blueGrey,
-              ),
-            ],
+    if (sales.isNotEmpty) {
+      return ListView.builder(
+        itemCount: cart.sales.length,
+        itemBuilder: (context, index) => Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      sales[index].item.name,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '${rupiah(sales[index].item.price).formattedLeftSymbol} x ${sales[index].qty}',
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.orange),
+                    ),
+                  ],
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () => cart.remove(sales[index]),
+                  color: Colors.blueGrey,
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Image.asset('empty.png', fit: BoxFit.cover, width: double.infinity),
+        ],
+      );
+    }
   }
 }
 
@@ -116,24 +128,25 @@ class __CartTotalState extends State<_CartTotal> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0)),
               onPressed: () {
-                cart.postAll();
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text("Transaksi Berhasil! 😉"),
-                      actions: <Widget>[
-                        // usually buttons at the bottom of the dialog
-                        FlatButton(
-                          child: Text("Tutup"),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
+                if (cart.sales.isNotEmpty) {
+                  cart.postAll();
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text("Transaksi Berhasil! 😉"),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text("Tutup"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
               },
             ),
           ),
