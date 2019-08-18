@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:qr_utils/qr_utils.dart';
-import 'package:tiancell/models/Auth.dart';
+import 'package:tiancell/models/auth.dart';
 import 'package:tiancell/models/item.dart';
 import 'package:tiancell/models/sale.dart';
 import 'package:http/http.dart' as http;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:tiancell/models/Auth.dart';
+import 'package:tiancell/models/auth.dart';
 import 'package:tiancell/models/service.dart';
 import 'package:http/http.dart' as http;
 
