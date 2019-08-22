@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiancell/models/model.dart';
+import 'package:tiancell/models/models.dart';
 import 'package:tiancell/models/sale.dart';
 
 import 'format.dart';

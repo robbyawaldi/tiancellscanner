@@ -4,7 +4,7 @@ import 'package:tiancell/screens/cart.dart';
 import 'package:tiancell/screens/scanner.dart';
 import 'package:tiancell/screens/service.dart';
 
-import 'models/model.dart';
+import 'models/models.dart';
 
 void main() => runApp(MyApp());
 
