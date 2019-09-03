@@ -87,21 +87,22 @@ class _StockCardState extends State<StockCard> {
                           color: Colors.orange[600],
                           textColor: Colors.white,
                           child: Text('Tambah ke Keranjang'),
-                          onPressed: _item.stock < 1 && cart.sales.contains(_item)
-                              ? null
-                              : () {
-                                  cart.addSale(_item, _qty);
-                                  setState(() {
-                                    _item = null;
-                                  });
-                                  Scaffold.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          'Item berhasil ditambahkan ke keranjang'),
-                                      duration: Duration(seconds: 1),
-                                    ),
-                                  );
-                                },
+                          onPressed:
+                              _item.stock < 1 && cart.sales.contains(_item)
+                                  ? null
+                                  : () {
+                                      cart.addSale(_item, _qty);
+                                      setState(() {
+                                        _item = null;
+                                      });
+                                      Scaffold.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Item berhasil ditambahkan ke keranjang'),
+                                          duration: Duration(seconds: 1),
+                                        ),
+                                      );
+                                    },
                         )
                       ],
                     ),
@@ -139,9 +140,10 @@ class _StockCardState extends State<StockCard> {
               icon: Icon(Icons.photo_camera),
               onPressed: () async {
                 await QrUtils.scanQR.then((id) {
-                  ItemModel()
-                      .getById(id)
-                      .then((item) => setState(() => _item = item));
+                  if (id != null)
+                    ItemModel()
+                        .getById(id)
+                        .then((item) => setState(() => _item = item));
                 });
               },
             )

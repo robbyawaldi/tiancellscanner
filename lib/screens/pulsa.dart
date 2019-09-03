@@ -23,7 +23,7 @@ class _PulsaCardState extends State<PulsaCard> {
     var cart = Prov.Provider.of<CartModel>(context);
 
     return Container(
-      height: _nominal != null ? 210 : 100,
+      height: _nominal != null ? 210 : 140,
       width: 279,
       child: Card(
         child: Padding(
@@ -105,6 +105,7 @@ class _PulsaCardState extends State<PulsaCard> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 DropdownButton<Provider>(
                   items: snapshot.data
@@ -118,15 +119,17 @@ class _PulsaCardState extends State<PulsaCard> {
                       _provider = provider;
                     });
                   },
-                  hint: Text('Pilih Provider'),
+                  hint: Text(_provider?.name ?? 'Pilih Provider'),
                 ),
                 DropdownButton<Nominal>(
-                  items: _provider?.nominals ?? []
-                      .map((nominal) => DropdownMenuItem<Nominal>(
-                            child: Text(nominal.name),
-                            value: nominal,
-                          ))
-                      .toList(),
+                  items: _provider == null
+                      ? []
+                      : _provider.nominals
+                          .map((nominal) => DropdownMenuItem<Nominal>(
+                                child: Text(nominal.name),
+                                value: nominal,
+                              ))
+                          .toList(),
                   onChanged: (Nominal nominal) {
                     setState(() {
                       _nominal = nominal;
@@ -134,16 +137,16 @@ class _PulsaCardState extends State<PulsaCard> {
                   },
                   hint: Text('Pilih Nominal'),
                 ),
-
               ],
             ),
             IconButton(
               icon: Icon(Icons.photo_camera),
               onPressed: () async {
                 await QrUtils.scanQR.then((id) {
-                  NominalModel()
-                      .getById(id)
-                      .then((nominal) => setState(() => _nominal = nominal));
+                  if (id != null)
+                    NominalModel()
+                        .getById(id)
+                        .then((nominal) => setState(() => _nominal = nominal));
                 });
               },
             )
