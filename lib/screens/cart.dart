@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiancell/models/models.dart';
+import 'package:tiancell/models/cart.dart';
 import 'package:tiancell/models/sale.dart';
 
 import 'format.dart';
@@ -35,41 +35,42 @@ class _CartList extends StatelessWidget {
     List<Sale> sales = cart.sales;
 
     if (sales.isNotEmpty) {
-      return ListView.builder(
-        itemCount: cart.sales.length,
-        itemBuilder: (context, index) => Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      sales[index].item.name,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      '${rupiah(sales[index].item.price).formattedLeftSymbol} x ${sales[index].qty}',
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.orange),
-                    ),
-                  ],
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () => cart.remove(sales[index]),
-                  color: Colors.blueGrey,
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
+      return Center();
+      // return ListView.builder(
+      //   itemCount: cart.sales.length,
+      //   itemBuilder: (context, index) => Card(
+      //     child: Padding(
+      //       padding: const EdgeInsets.all(16.0),
+      //       child: Row(
+      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //         children: <Widget>[
+      //           Column(
+      //             crossAxisAlignment: CrossAxisAlignment.start,
+      //             children: <Widget>[
+      //               Text(
+      //                 sales[index].item.name,
+      //                 style:
+      //                     TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      //               ),
+      //               Text(
+      //                 '${rupiah(sales[index].item.price).formattedLeftSymbol} x ${sales[index].qty}',
+      //                 style: TextStyle(
+      //                     fontSize: 12,
+      //                     fontWeight: FontWeight.bold,
+      //                     color: Colors.orange),
+      //               ),
+      //             ],
+      //           ),
+      //           IconButton(
+      //             icon: Icon(Icons.delete),
+      //             onPressed: () => cart.remove(sales[index]),
+      //             color: Colors.blueGrey,
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // );
     } else {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -129,7 +130,7 @@ class __CartTotalState extends State<_CartTotal> {
                   borderRadius: BorderRadius.circular(5.0)),
               onPressed: () {
                 if (cart.sales.isNotEmpty) {
-                  cart.postAll();
+                  // cart.postAll();
                   showDialog(
                     context: context,
                     builder: (context) {

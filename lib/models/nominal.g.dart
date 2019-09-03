@@ -1,16 +1,15 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'item.dart';
+part of 'nominal.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Item _$ItemFromJson(Map<String, dynamic> json) {
-  return Item()
+Nominal _$NominalFromJson(Map<String, dynamic> json) {
+  return Nominal()
     ..id = json['id'] as num
     ..name = json['name'] as String
-    ..price = json['price'] as num
-    ..stock = json['stock'] as num
-    ..currentpurchase = json['currentpurchase'] as num;
+    ..cost = json['cost'] as num
+    ..price = json['price'] as num;
 }

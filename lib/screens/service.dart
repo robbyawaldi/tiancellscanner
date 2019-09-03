@@ -157,12 +157,13 @@ class _ServiceFormState extends State<ServiceForm> {
                       borderRadius: BorderRadius.circular(30.0)),
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
-                      Service service = Service.input(
-                          brand: merkField.text,
-                          type: tipeField.text,
-                          desc: deskField.text,
-                          cost: modalField.numberValue,
-                          price: jualField.numberValue);
+                      Service service;
+                      // Service.input(
+                      //     brand: merkField.text,
+                      //     type: tipeField.text,
+                      //     desc: deskField.text,
+                      //     cost: modalField.numberValue,
+                      //     price: jualField.numberValue);
                       post(service).then((response) {
                         if (response == 201) {
                           merkField.clear();
