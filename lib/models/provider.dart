@@ -19,6 +19,15 @@ class ProviderModel {
       throw Exception('Failed to load providers');
     }
   }
+
+  Future<Provider> getById(String id) async {
+    var response = await http.get('$_url$id', headers: {'Authorization': basicAuth});
+    if (response.statusCode == 200) {
+      return Provider.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to load provider');
+    }
+  }
 }
 
 @JsonSerializable()

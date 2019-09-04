@@ -24,6 +24,7 @@ class Nominal {
     Nominal();
 
     num id;
+    num provider;
     String name;
     num cost;
     num price;

@@ -9,6 +9,7 @@ part of 'nominal.dart';
 Nominal _$NominalFromJson(Map<String, dynamic> json) {
   return Nominal()
     ..id = json['id'] as num
+    ..provider = json['provider'] as num
     ..name = json['name'] as String
     ..cost = json['cost'] as num
     ..price = json['price'] as num;

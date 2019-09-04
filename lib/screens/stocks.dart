@@ -39,14 +39,14 @@ class _StockCardState extends State<StockCard> {
   Widget build(BuildContext context) {
     var cart = Provider.of<CartModel>(context);
 
-    return Container(
+    return SizedBox(
       height: _item != null ? 210 : 100,
-      width: 279,
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: _item != null
-              ? Column(
+          child: _item == null
+              ? _selectItem()
+              : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     // Item name
@@ -87,6 +87,8 @@ class _StockCardState extends State<StockCard> {
                           color: Colors.orange[600],
                           textColor: Colors.white,
                           child: Text('Tambah ke Keranjang'),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
                           onPressed:
                               _item.stock < 1 && cart.sales.contains(_item)
                                   ? null
@@ -107,8 +109,7 @@ class _StockCardState extends State<StockCard> {
                       ],
                     ),
                   ],
-                )
-              : _selectItem(),
+                ),
         ),
       ),
     );

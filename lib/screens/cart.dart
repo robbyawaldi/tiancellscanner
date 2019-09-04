@@ -8,21 +8,14 @@ import 'format.dart';
 class Cart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.indigo,
-        title: Text('Keranjang'),
-      ),
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          children: <Widget>[
-            Expanded(child: _CartList()),
-            Divider(height: 4, color: Colors.grey),
-            _CartTotal()
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        children: <Widget>[
+          Expanded(child: _CartList()),
+          Divider(height: 4, color: Colors.grey),
+          _CartTotal()
+        ],
       ),
     );
   }
