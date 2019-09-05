@@ -35,19 +35,16 @@ class SaleModel {
 class Sale implements CartList {
   Sale();
 
-  num idItem;
-  String name;
-  num purchase;
-  num price;
+  Item item;
   num qty;
 
-  get subtotal => this.price * this.qty;
+  get subtotal => this.item.price * this.qty;
 
   @override
-  int get hashCode => idItem;
+  int get hashCode => this.item.id;
 
   @override
-  bool operator ==(Object other) => other is Item && other.id == idItem;
+  bool operator ==(Object other) => other is Item && other.id == this.item.id;
 
   Map<String, dynamic> toJson() => _$SaleToJson(this);
 }

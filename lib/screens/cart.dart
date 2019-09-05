@@ -50,16 +50,16 @@ class _CartList extends StatelessWidget {
           Widget _nameItem() {
             if (item is Sale)
               return Text(
-                '${item.name}',
+                '${item.item.name.toUpperCase()}',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               );
             else if (item is Transaction)
               return Text(
-                '${item.name}',
+                '${item.name.toUpperCase()}',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               );
             else if (item is Service)
-              return Text('Service ${item.brand} ${item.type}',
+              return Text('SERVICE ${item.brand.toUpperCase()} ${item.type.toUpperCase()}',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
             else
               return null;
@@ -68,9 +68,9 @@ class _CartList extends StatelessWidget {
           Widget _priceItem() {
             if (item is Sale)
               return Text(
-                '${rupiah(item.price).formattedLeftSymbol}',
+                '${rupiah(item.item.price).formattedLeftSymbol}',
                 style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.orange),
               );
@@ -78,7 +78,7 @@ class _CartList extends StatelessWidget {
               return Text(
                 '${rupiah(item.price).formattedLeftSymbol}',
                 style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.orange),
               );
@@ -86,7 +86,7 @@ class _CartList extends StatelessWidget {
               return Text(
                 '${rupiah(item.price).formattedLeftSymbol}',
                 style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.orange),
               );
@@ -94,22 +94,73 @@ class _CartList extends StatelessWidget {
               return null;
           }
 
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Widget _selectQuantity() {
+            if (item is Sale)
+              return Column(
                 children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[_nameItem(), _priceItem()],
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () => cart.remove(index),
-                    color: Colors.blueGrey,
+                  SizedBox(height: 15),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        'Jumlah',
+                        style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                      ),
+                      Expanded(
+                        child: SizedBox(
+                          width: double.infinity,
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.remove),
+                        color: Colors.black,
+                        onPressed: () => cart.minusQtyItem(index),
+                        splashColor: Colors.white,
+                      ),
+                      Text('${item.qty}', style: new TextStyle(fontSize: 14.0)),
+                      IconButton(
+                        onPressed: () => cart.addQtyItem(index),
+                        icon: Icon(Icons.add),
+                        color: Colors.black,
+                        splashColor: Colors.white,
+                      ),
+                    ],
                   ),
                 ],
+              );
+            else
+              return SizedBox();
+          }
+
+          return SizedBox(
+            height: item is Sale ? 150 : 100,
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              _nameItem(),
+                              _priceItem(),
+                            ],
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () => cart.remove(index),
+                            color: Colors.blueGrey,
+                          ),
+                        ],
+                      ),
+                    ),
+                    _selectQuantity()
+                  ],
+                ),
               ),
             ),
           );

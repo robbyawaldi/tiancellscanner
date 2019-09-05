@@ -7,7 +7,7 @@ part of 'sale.dart';
 // **************************************************************************
 
 Map<String, dynamic> _$SaleToJson(Sale instance) => <String, dynamic>{
-      'purchase': instance.purchase.toString(),
-      'price': instance.price.toString(),
+      'purchase': instance.item.currentpurchase.toString(),
+      'price': instance.item.price.toString(),
       'qty': instance.qty.toString()
     };

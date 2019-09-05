@@ -23,7 +23,7 @@ class _PulsaCardState extends State<PulsaCard> {
     var cart = Prov.Provider.of<CartModel>(context);
 
     return SizedBox(
-      height: _nominal != null ? 170 : 140,
+      height: _nominal != null ? 155 : 140,
       child: Card(
         child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -33,10 +33,12 @@ class _PulsaCardState extends State<PulsaCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       // Item name
-                      Text(
-                        "${_provider.name.toUpperCase()} ${_nominal.name.toUpperCase()}",
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                      Expanded(
+                        child: Text(
+                          "${_provider.name.toUpperCase()} ${_nominal.name.toUpperCase()}",
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
                       ),
                       // Item price
                       Text(
@@ -46,10 +48,7 @@ class _PulsaCardState extends State<PulsaCard> {
                             fontWeight: FontWeight.bold,
                             color: Colors.orange),
                       ),
-                      Expanded(
-                        child: SizedBox(),
-                      ),
-                      SizedBox(height: 15),
+                      SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
@@ -100,57 +99,66 @@ class _PulsaCardState extends State<PulsaCard> {
     return FutureBuilder<List<Provider>>(
       future: ProviderModel().providers(),
       builder: (BuildContext context, AsyncSnapshot<List<Provider>> snapshot) {
-        if (!snapshot.hasData) return Center(child: Text('Loading..'));
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            DropdownButton<Provider>(
-              items: snapshot.data
-                  .map((provider) => DropdownMenuItem<Provider>(
-                        child: Text(provider.name),
-                        value: provider,
-                      ))
-                  .toList(),
-              onChanged: (Provider provider) {
-                setState(() {
-                  _provider = provider;
-                });
-              },
-              hint: Text(_provider?.name ?? 'Pilih Provider'),
-            ),
-            DropdownButton<Nominal>(
-              items: _provider == null
-                  ? []
-                  : _provider.nominals
-                      .map((nominal) => DropdownMenuItem<Nominal>(
-                            child: Text(nominal.name),
-                            value: nominal,
+            Text('Pulsa', style: Theme.of(context).textTheme.headline),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                DropdownButton<Provider>(
+                  items: snapshot.data
+                      .map((provider) => DropdownMenuItem<Provider>(
+                            child: Text(provider.name),
+                            value: provider,
                           ))
                       .toList(),
-              onChanged: (Nominal nominal) {
-                setState(() {
-                  _nominal = nominal;
-                });
-              },
-              hint: Text('Pilih Nominal'),
-            ),
-            IconButton(
-              icon: Icon(Icons.photo_camera),
-              onPressed: () async {
-                await QrUtils.scanQR.then((id) {
-                  if (id != null) {
-                    NominalModel().getById(id).then((nominal) {
-                      ProviderModel().getById(nominal.provider.toString()).then((provider) {
-                        setState(() {
-                          _provider = provider;
-                          _nominal = nominal;
-                        });
-                      });
+                  onChanged: (Provider provider) {
+                    setState(() {
+                      _provider = provider;
                     });
-                  }
-                });
-              },
-            )
+                  },
+                  hint: Text(_provider?.name ?? 'Provider'),
+                ),
+                DropdownButton<Nominal>(
+                  items: _provider == null
+                      ? []
+                      : _provider.nominals
+                          .map((nominal) => DropdownMenuItem<Nominal>(
+                                child: Text(nominal.name),
+                                value: nominal,
+                              ))
+                          .toList(),
+                  onChanged: (Nominal nominal) {
+                    setState(() {
+                      _nominal = nominal;
+                    });
+                  },
+                  hint: Text('Nominal'),
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo_camera),
+                  onPressed: () async {
+                    await QrUtils.scanQR.then((id) {
+                      if (id != null) {
+                        NominalModel().getById(id).then((nominal) {
+                          ProviderModel()
+                              .getById(nominal.provider.toString())
+                              .then((provider) {
+                            setState(() {
+                              _provider = provider;
+                              _nominal = nominal;
+                            });
+                          });
+                        });
+                      }
+                    });
+                  },
+                )
+              ],
+            ),
           ],
         );
       },

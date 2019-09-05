@@ -10,10 +10,7 @@ class CartModel extends ChangeNotifier {
 
   void addSale(Item item, int qty) {
     Sale sale = Sale()
-      ..idItem = item.id
-      ..name = item.name
-      ..purchase = item.currentpurchase
-      ..price = item.price
+      ..item = item
       ..qty = qty;
     list.add(sale);
     notifyListeners();
@@ -42,6 +39,18 @@ class CartModel extends ChangeNotifier {
 
   void remove(int index) {
     list.removeAt(index);
+    notifyListeners();
+  }
+
+  void addQtyItem(int index) {
+    Sale sale = list[index];
+    if (sale.qty < sale.item?.stock ?? 0) sale.qty++;
+    notifyListeners();
+  }
+
+  void minusQtyItem(int index) {
+    Sale sale = list[index];
+    if (sale.qty != 1) sale.qty--;
     notifyListeners();
   }
 

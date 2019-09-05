@@ -41,7 +41,7 @@ class _StockCardState extends State<StockCard> {
     var cart = Provider.of<CartModel>(context);
 
     return SizedBox(
-      height: _item != null ? 210 : 100,
+      height: _item != null ? 200 : 130,
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -49,12 +49,15 @@ class _StockCardState extends State<StockCard> {
               ? _selectItem()
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     // Item name
-                    Text(
-                      _item.name.toUpperCase(),
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    Expanded(
+                      child: Text(
+                        _item.name.toUpperCase(),
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
                     ),
                     // Item price
                     Text(
@@ -64,12 +67,9 @@ class _StockCardState extends State<StockCard> {
                           fontWeight: FontWeight.bold,
                           color: Colors.orange),
                     ),
-                    Expanded(
-                      child: SizedBox(),
-                    ),
                     // Item qty
                     _selectQuantity(),
-                    SizedBox(height: 15),
+                    SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
@@ -90,7 +90,7 @@ class _StockCardState extends State<StockCard> {
                           child: Text('Tambah ke Keranjang'),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0)),
-                          onPressed: _item.stock < 1 &&
+                          onPressed: _item.stock < 1 ||
                                   cart.list
                                       .where((item) => item is Sale)
                                       .contains(_item)
@@ -122,35 +122,42 @@ class _StockCardState extends State<StockCard> {
     return FutureBuilder<List<Item>>(
       future: ItemModel().items(),
       builder: (BuildContext context, AsyncSnapshot<List<Item>> snapshot) {
-        if (!snapshot.hasData) return Center(child: Text('Loading..'));
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            DropdownButton<Item>(
-              items: snapshot.data
-                  .map((item) => DropdownMenuItem<Item>(
-                        child: Text(item.name),
-                        value: item,
-                      ))
-                  .toList(),
-              onChanged: (Item item) {
-                setState(() {
-                  _item = item;
-                });
-              },
-              hint: Text('Pilih Barang'),
+            Text('Item', style: Theme.of(context).textTheme.headline),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                DropdownButton<Item>(
+                  items: snapshot.data
+                      .map((item) => DropdownMenuItem<Item>(
+                            child: Text(item.name),
+                            value: item,
+                          ))
+                      .toList(),
+                  onChanged: (Item item) {
+                    setState(() {
+                      _item = item;
+                    });
+                  },
+                  hint: Text('Pilih Barang'),
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo_camera),
+                  onPressed: () async {
+                    await QrUtils.scanQR.then((id) {
+                      if (id != null)
+                        ItemModel()
+                            .getById(id)
+                            .then((item) => setState(() => _item = item));
+                    });
+                  },
+                )
+              ],
             ),
-            IconButton(
-              icon: Icon(Icons.photo_camera),
-              onPressed: () async {
-                await QrUtils.scanQR.then((id) {
-                  if (id != null)
-                    ItemModel()
-                        .getById(id)
-                        .then((item) => setState(() => _item = item));
-                });
-              },
-            )
           ],
         );
       },

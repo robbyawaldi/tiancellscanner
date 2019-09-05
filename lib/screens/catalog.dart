@@ -45,12 +45,13 @@ class _Cards extends StatefulWidget {
 class __CardsState extends State<_Cards> {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Padding(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[StockCard(), PulsaCard(), ServiceCard()],
       ),
+      padding: const EdgeInsets.all(14.0),
     );
   }
 }
