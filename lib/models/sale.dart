@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 
 import 'auth.dart';
 import 'item.dart';
+import 'cart.dart';
 
 part 'sale.g.dart';
 
@@ -15,23 +16,27 @@ class SaleModel {
     return response.statusCode;
   }
 
-  List<Sale> postAll(List<Sale> _sales) {
-    _sales.forEach((sale) {
-      post(sale).then((response) {
-        if (response == 201) {
-          _sales.remove(sale);
-        }
-      });
-    });
+  Future<List<Sale>> postAll(List<Sale> _sales) async {
+    List<int> indexs = [];
+    for (Sale sale in _sales) {
+      indexs.add(await post(sale));
+    }
+    
+    for (var i = 0; i < indexs.length; i++) {
+      if (indexs[i] == 201) {
+        _sales.removeAt(i);
+      }
+    }
     return _sales;
   }
 }
 
 @JsonSerializable()
-class Sale {
+class Sale implements CartList {
   Sale();
 
   num idItem;
+  String name;
   num purchase;
   num price;
   num qty;

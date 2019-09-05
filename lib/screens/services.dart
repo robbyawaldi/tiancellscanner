@@ -15,22 +15,16 @@ class _ServiceCardState extends State<ServiceCard> {
   var tipeField = TextEditingController();
   var deskField = TextEditingController();
   var modalField = MoneyMaskedTextController(
-      leftSymbol: 'Harga Modal: Rp',
-      thousandSeparator: '.',
-      decimalSeparator: '',
-      precision: 0);
+      thousandSeparator: '.', decimalSeparator: '', precision: 0);
   var jualField = MoneyMaskedTextController(
-      leftSymbol: 'Harga Jual: Rp',
-      thousandSeparator: '.',
-      decimalSeparator: '',
-      precision: 0);
+      thousandSeparator: '.', decimalSeparator: '', precision: 0);
 
   @override
   Widget build(BuildContext context) {
     var cart = Provider.of<CartModel>(context);
 
     return SizedBox(
-      height: 550,
+      height: 540,
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(14.0),
@@ -41,12 +35,9 @@ class _ServiceCardState extends State<ServiceCard> {
                 TextFormField(
                   controller: merkField,
                   decoration: InputDecoration(
-                      hintText: 'Merk',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(32.0),
+                      labelText: 'Merk',
+                      labelStyle: TextStyle(color: Colors.indigo),
+                      focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.indigo))),
                   validator: (value) {
                     if (value.isEmpty) {
@@ -59,12 +50,9 @@ class _ServiceCardState extends State<ServiceCard> {
                 TextFormField(
                   controller: tipeField,
                   decoration: InputDecoration(
-                      hintText: 'Tipe',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(32.0),
+                      labelText: 'Tipe',
+                      labelStyle: TextStyle(color: Colors.indigo),
+                      focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.indigo))),
                   validator: (value) {
                     if (value.isEmpty) {
@@ -77,13 +65,12 @@ class _ServiceCardState extends State<ServiceCard> {
                 TextFormField(
                   controller: deskField,
                   decoration: InputDecoration(
-                      hintText: 'Keterangan',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(32.0),
-                          borderSide: BorderSide(color: Colors.indigo))),
+                    labelText: 'Keterangan',
+                    labelStyle: TextStyle(color: Colors.indigo),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.indigo),
+                    ),
+                  ),
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Tolong masukkan form keterangan';
@@ -96,12 +83,9 @@ class _ServiceCardState extends State<ServiceCard> {
                   controller: modalField,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                      hintText: 'Harga Modal',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(32.0),
+                      labelText: 'Harga Modal',
+                      labelStyle: TextStyle(color: Colors.indigo),
+                      focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.indigo))),
                   validator: (value) {
                     if (value.isEmpty) {
@@ -116,12 +100,9 @@ class _ServiceCardState extends State<ServiceCard> {
                   autofocus: false,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                      hintText: 'Harga Jual',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(32.0),
+                      labelText: 'Harga Jual',
+                      labelStyle: TextStyle(color: Colors.indigo),
+                      focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.indigo))),
                   validator: (value) {
                     if (value.isEmpty) {
@@ -130,41 +111,41 @@ class _ServiceCardState extends State<ServiceCard> {
                     return null;
                   },
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: FlatButton(
-                      color: Colors.orange[600],
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0)),
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          cart.addService(
-                              merkField.text,
-                              tipeField.text,
-                              deskField.text,
-                              modalField.numberValue,
-                              jualField.numberValue);
+                Expanded(
+                  child: SizedBox(),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: FlatButton(
+                    color: Colors.orange[600],
+                    textColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)),
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        cart.addService(
+                            merkField.text,
+                            tipeField.text,
+                            deskField.text,
+                            modalField.numberValue,
+                            jualField.numberValue);
 
-                          merkField.clear();
-                          tipeField.clear();
-                          deskField.clear();
-                          modalField.clear();
-                          jualField.clear();
-                          Scaffold.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                  'Data service berhasil ditambahkan ke keranjang'),
-                              duration: Duration(seconds: 1),
-                            ),
-                          );
-                        }
-                      },
-                      child: Text('Tambah ke keranjang'),
-                    ),
+                        merkField.clear();
+                        tipeField.clear();
+                        deskField.clear();
+                        modalField.updateValue(0);
+                        jualField.updateValue(0);
+                        Scaffold.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Data service berhasil ditambahkan ke keranjang'),
+                            duration: Duration(seconds: 1),
+                          ),
+                        );
+                      }
+                    },
+                    child: Text('Tambah ke keranjang'),
                   ),
                 ),
               ],

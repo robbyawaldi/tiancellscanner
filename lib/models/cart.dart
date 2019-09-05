@@ -3,28 +3,29 @@ import 'package:tiancell/models/index.dart';
 import 'package:tiancell/models/sale.dart';
 import 'package:tiancell/models/service.dart';
 
+abstract class CartList {}
+
 class CartModel extends ChangeNotifier {
-  var sales = <Sale>[];
-  var services = <Service>[];
-  var transactions = <Transaction>[];
+  var list = <CartList>[];
 
   void addSale(Item item, int qty) {
     Sale sale = Sale()
       ..idItem = item.id
+      ..name = item.name
       ..purchase = item.currentpurchase
       ..price = item.price
       ..qty = qty;
-    sales.add(sale);
+    list.add(sale);
     notifyListeners();
   }
 
   void addTransaction(Provider provider, Nominal nominal) {
     Transaction transaction = Transaction()
-      ..name = provider.name
+      ..name = '${provider.name} ${nominal.name}'
       ..cost = nominal.cost
       ..price = nominal.price
       ..nominal = nominal.id;
-    transactions.add(transaction);
+    list.add(transaction);
     notifyListeners();
   }
 
@@ -35,33 +36,62 @@ class CartModel extends ChangeNotifier {
       ..desc = desc
       ..cost = cost
       ..price = price;
-    services.add(service);
+    list.add(service);
     notifyListeners();
   }
 
-  void removeSale(Sale sale) {
-    sales.remove(sale);
-    notifyListeners();
-  }
-  void removeTransaction(Transaction transaction) {
-    transactions.remove(transaction);
-    notifyListeners();
-  }
-  void removeService(Service service) {
-    services.remove(service);
+  void remove(int index) {
+    list.removeAt(index);
     notifyListeners();
   }
 
-  bool posts() {
-    sales = SaleModel().postAll(sales);
-    transactions = TransactionModel().postAll(transactions);
-    services = ServiceModel().postAll(services);
+  Future<bool> posts() async {
+    List<Sale> _sales = [];
+    List<Transaction> _transactions = [];
+    List<Service> _services = [];
+
+    list.forEach((item) {
+      if (item is Sale) {
+        _sales.add(item);
+      } else if (item is Transaction) {
+        _transactions.add(item);
+      } else if (item is Service) {
+        _services.add(item);
+      }
+    });
+
+    if (_sales.isNotEmpty) {
+      await SaleModel().postAll(_sales).then((sales) => _sales = sales);
+    }
+    if (_transactions.isNotEmpty) {
+      await TransactionModel()
+          .postAll(_transactions)
+          .then((transactions) => _transactions = transactions);
+    }
+    if (_services.isNotEmpty) {
+      await ServiceModel()
+          .postAll(_services)
+          .then((services) => _services = services);
+    }
+
+    list.clear();
+    list.addAll(_sales);
+    list.addAll(_transactions);
+    list.addAll(_services);
+
     notifyListeners();
-    return sales.isEmpty && transactions.isEmpty && services.isEmpty;
+    return list.isEmpty;
   }
 
-  double get totalPrice => 
-    sales.fold(0.0, (total, current) => total + current.subtotal) +
-    transactions.fold(0.0, (total, current) => total + current.price) +
-    services.fold(0.0, (total, current) => total + current.price);
+  double get totalPrice => list.fold(0.0, (total, current) {
+        if (current is Sale) {
+          return total + current.subtotal;
+        } else if (current is Transaction) {
+          return total + current.price;
+        } else if (current is Service) {
+          return total + current.price;
+        } else {
+          return 0.0;
+        }
+      });
 }

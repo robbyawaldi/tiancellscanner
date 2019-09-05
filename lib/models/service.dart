@@ -2,6 +2,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:http/http.dart' as http;
 import 'package:tiancell/models/auth.dart';
 
+import 'cart.dart';
+
 part 'service.g.dart';
 
 class ServiceModel {
@@ -13,20 +15,23 @@ class ServiceModel {
     return response.statusCode;
   }
 
-  List<Service> postAll(List<Service> _services) {
-    _services.forEach((service) {
-      post(service).then((response) {
-        if (response == 201) {
-          _services.remove(service);
-        }
-      });
-    });
+  Future<List<Service>> postAll(List<Service> _services) async {
+    List<int> indexs = [];
+    for (Service service in _services) {
+      indexs.add(await post(service));
+    }
+    
+    for (var i = 0; i < indexs.length; i++) {
+      if (indexs[i] == 201) {
+        _services.removeAt(i);
+      }
+    }
     return _services;
   }
 }
 
 @JsonSerializable()
-class Service {
+class Service implements CartList {
   Service();
 
   String brand;

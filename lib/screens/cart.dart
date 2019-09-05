@@ -2,17 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiancell/models/cart.dart';
 import 'package:tiancell/models/sale.dart';
+import 'package:tiancell/models/service.dart';
+import 'package:tiancell/models/transaction.dart';
 
 import 'format.dart';
 
 class Cart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var cart = Provider.of<CartModel>(context);
+
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
         children: <Widget>[
-          Expanded(child: _CartList()),
+          Expanded(
+              child: cart.list.isNotEmpty
+                  ? _CartList()
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset('empty.png',
+                            fit: BoxFit.cover, width: double.infinity),
+                      ],
+                    )),
           Divider(height: 4, color: Colors.grey),
           _CartTotal()
         ],
@@ -22,66 +36,90 @@ class Cart extends StatelessWidget {
 }
 
 class _CartList extends StatelessWidget {
+  const _CartList({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var cart = Provider.of<CartModel>(context);
-    List<Sale> sales = cart.sales;
 
-    if (sales.isNotEmpty) {
-      return Center();
-      // return ListView.builder(
-      //   itemCount: cart.sales.length,
-      //   itemBuilder: (context, index) => Card(
-      //     child: Padding(
-      //       padding: const EdgeInsets.all(16.0),
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //         children: <Widget>[
-      //           Column(
-      //             crossAxisAlignment: CrossAxisAlignment.start,
-      //             children: <Widget>[
-      //               Text(
-      //                 sales[index].item.name,
-      //                 style:
-      //                     TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      //               ),
-      //               Text(
-      //                 '${rupiah(sales[index].item.price).formattedLeftSymbol} x ${sales[index].qty}',
-      //                 style: TextStyle(
-      //                     fontSize: 12,
-      //                     fontWeight: FontWeight.bold,
-      //                     color: Colors.orange),
-      //               ),
-      //             ],
-      //           ),
-      //           IconButton(
-      //             icon: Icon(Icons.delete),
-      //             onPressed: () => cart.remove(sales[index]),
-      //             color: Colors.blueGrey,
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // );
-    } else {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Image.asset('empty.png', fit: BoxFit.cover, width: double.infinity),
-        ],
-      );
-    }
+    return ListView.builder(
+        itemCount: cart.list.length,
+        itemBuilder: (context, index) {
+          final item = cart.list[index];
+
+          Widget _nameItem() {
+            if (item is Sale)
+              return Text(
+                '${item.name}',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              );
+            else if (item is Transaction)
+              return Text(
+                '${item.name}',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              );
+            else if (item is Service)
+              return Text('Service ${item.brand} ${item.type}',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
+            else
+              return null;
+          }
+
+          Widget _priceItem() {
+            if (item is Sale)
+              return Text(
+                '${rupiah(item.price).formattedLeftSymbol}',
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange),
+              );
+            else if (item is Transaction)
+              return Text(
+                '${rupiah(item.price).formattedLeftSymbol}',
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange),
+              );
+            else if (item is Service)
+              return Text(
+                '${rupiah(item.price).formattedLeftSymbol}',
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange),
+              );
+            else
+              return null;
+          }
+
+          return Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[_nameItem(), _priceItem()],
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () => cart.remove(index),
+                    color: Colors.blueGrey,
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
 
-class _CartTotal extends StatefulWidget {
-  @override
-  __CartTotalState createState() => __CartTotalState();
-}
+class _CartTotal extends StatelessWidget {
+  const _CartTotal({Key key}) : super(key: key);
 
-class __CartTotalState extends State<_CartTotal> {
   @override
   Widget build(BuildContext context) {
     var cart = Provider.of<CartModel>(context);
@@ -121,27 +159,30 @@ class __CartTotalState extends State<_CartTotal> {
               child: Text('Bayar', style: TextStyle(fontSize: 17)),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0)),
-              onPressed: () {
-                if (cart.sales.isNotEmpty) {
-                  // cart.postAll();
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text("Transaksi Berhasil"),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text("Tutup"),
-                            onPressed: () {
-                              Navigator.of(context).pop();
+              onPressed: cart.list.isEmpty
+                  ? null
+                  : () async {
+                      await cart.posts().then((success) {
+                        if (success) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text("Transaksi Berhasil"),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text("Tutup"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
                             },
-                          ),
-                        ],
-                      );
+                          );
+                        }
+                      });
                     },
-                  );
-                }
-              },
             ),
           ),
         ],

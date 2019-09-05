@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_utils/qr_utils.dart';
 import 'package:tiancell/models/cart.dart';
 import 'package:tiancell/models/item.dart';
+import 'package:tiancell/models/sale.dart';
 
 import 'format.dart';
 
@@ -89,22 +90,24 @@ class _StockCardState extends State<StockCard> {
                           child: Text('Tambah ke Keranjang'),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0)),
-                          onPressed:
-                              _item.stock < 1 && cart.sales.contains(_item)
-                                  ? null
-                                  : () {
-                                      cart.addSale(_item, _qty);
-                                      setState(() {
-                                        _item = null;
-                                      });
-                                      Scaffold.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                              'Item berhasil ditambahkan ke keranjang'),
-                                          duration: Duration(seconds: 1),
-                                        ),
-                                      );
-                                    },
+                          onPressed: _item.stock < 1 &&
+                                  cart.list
+                                      .where((item) => item is Sale)
+                                      .contains(_item)
+                              ? null
+                              : () {
+                                  cart.addSale(_item, _qty);
+                                  setState(() {
+                                    _item = null;
+                                  });
+                                  Scaffold.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          'Item berhasil ditambahkan ke keranjang'),
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                },
                         )
                       ],
                     ),

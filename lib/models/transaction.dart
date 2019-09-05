@@ -2,6 +2,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:http/http.dart' as http;
 import 'package:tiancell/models/auth.dart';
 
+import 'cart.dart';
+
 part 'transaction.g.dart';
 
 class TransactionModel {
@@ -13,26 +15,29 @@ class TransactionModel {
     return response.statusCode;
   }
 
-  List<Transaction> postAll(List<Transaction> _transactions) {
-    _transactions.forEach((transaction) {
-      post(transaction).then((response) {
-        if (response == 201) {
-          _transactions.remove(transaction);
-        }
-      });
-    });
+  Future<List<Transaction>> postAll(List<Transaction> _transactions) async {
+    List<int> indexs = [];
+    for (Transaction transaction in _transactions) {
+      indexs.add(await post(transaction));
+    }
+
+    for (var i = 0; i < indexs.length; i++) {
+      if (indexs[i] == 201) {
+        _transactions.removeAt(i);
+      }
+    }
     return _transactions;
   }
 }
 
 @JsonSerializable()
-class Transaction {
-    Transaction();
+class Transaction implements CartList {
+  Transaction();
 
-    String name;
-    num cost;
-    num price;
-    num nominal;
-    
-    Map<String, dynamic> toJson() => _$TransactionToJson(this);
+  String name;
+  num cost;
+  num price;
+  num nominal;
+
+  Map<String, dynamic> toJson() => _$TransactionToJson(this);
 }
