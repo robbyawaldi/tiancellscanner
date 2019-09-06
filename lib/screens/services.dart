@@ -44,6 +44,8 @@ class _ServiceCardState extends State<ServiceCard> {
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Tolong masukkan form merk';
+                      } else if (value.length > 10) {
+                        return 'Panjang merk melebihi 10 karakter';
                       }
                       return null;
                     },
@@ -59,6 +61,8 @@ class _ServiceCardState extends State<ServiceCard> {
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Tolong masukkan form tipe';
+                      } else if (value.length > 10) {
+                        return 'Panjang tipe melebihi 10 karakter';
                       }
                       return null;
                     },

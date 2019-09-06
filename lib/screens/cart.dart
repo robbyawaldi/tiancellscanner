@@ -59,7 +59,8 @@ class _CartList extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               );
             else if (item is Service)
-              return Text('SERVICE ${item.brand.toUpperCase()} ${item.type.toUpperCase()}',
+              return Text(
+                  'SERVICE ${item.brand.toUpperCase()} ${item.type.toUpperCase()}',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
             else
               return null;
@@ -132,17 +133,17 @@ class _CartList extends StatelessWidget {
           }
 
           return SizedBox(
-            height: item is Sale ? 150 : 100,
+            height: item is Sale ? 151 : 100,
             child: Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: <Widget>[
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Column(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
@@ -150,13 +151,13 @@ class _CartList extends StatelessWidget {
                               _priceItem(),
                             ],
                           ),
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () => cart.remove(index),
-                            color: Colors.blueGrey,
-                          ),
-                        ],
-                      ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () => cart.remove(index),
+                          color: Colors.blueGrey,
+                        ),
+                      ],
                     ),
                     _selectQuantity()
                   ],

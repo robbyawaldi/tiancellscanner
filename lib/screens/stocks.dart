@@ -41,7 +41,7 @@ class _StockCardState extends State<StockCard> {
     var cart = Provider.of<CartModel>(context);
 
     return SizedBox(
-      height: _item != null ? 200 : 130,
+      height: _item != null ? 223 : 130,
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -52,12 +52,10 @@ class _StockCardState extends State<StockCard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     // Item name
-                    Expanded(
-                      child: Text(
-                        _item.name.toUpperCase(),
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
+                    Text(
+                      _item.name.toUpperCase(),
+                      style: TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     // Item price
                     Text(
@@ -67,6 +65,7 @@ class _StockCardState extends State<StockCard> {
                           fontWeight: FontWeight.bold,
                           color: Colors.orange),
                     ),
+                    Expanded(child: SizedBox()),
                     // Item qty
                     _selectQuantity(),
                     SizedBox(height: 10),
@@ -143,7 +142,7 @@ class _StockCardState extends State<StockCard> {
                       _item = item;
                     });
                   },
-                  hint: Text('Pilih Barang'),
+                  hint: Text('Pilih Item'),
                 ),
                 IconButton(
                   icon: Icon(Icons.photo_camera),

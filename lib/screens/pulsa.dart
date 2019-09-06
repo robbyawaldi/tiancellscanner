@@ -23,7 +23,7 @@ class _PulsaCardState extends State<PulsaCard> {
     var cart = Prov.Provider.of<CartModel>(context);
 
     return SizedBox(
-      height: _nominal != null ? 155 : 140,
+      height: _nominal != null ? 165 : 140,
       child: Card(
         child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -33,12 +33,10 @@ class _PulsaCardState extends State<PulsaCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       // Item name
-                      Expanded(
-                        child: Text(
-                          "${_provider.name.toUpperCase()} ${_nominal.name.toUpperCase()}",
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
+                      Text(
+                        "${_provider.name.toUpperCase()} ${_nominal.name.toUpperCase()}",
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       // Item price
                       Text(
@@ -48,7 +46,7 @@ class _PulsaCardState extends State<PulsaCard> {
                             fontWeight: FontWeight.bold,
                             color: Colors.orange),
                       ),
-                      SizedBox(height: 10),
+                      Expanded(child: SizedBox()),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
