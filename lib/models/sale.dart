@@ -10,24 +10,25 @@ part 'sale.g.dart';
 class SaleModel {
   var _url = 'http://192.168.1.6/api/stocks/sales/';
 
-  Future<int> post(Sale sale) async {
-    var response = await http.post(_url,
-        headers: {'Authorization': basicAuth}, body: sale.toJson());
-    return response.statusCode;
-  }
+  Future<int> post(Sale sale) async => await http
+          .post(_url,
+              headers: {'Authorization': basicAuth}, body: sale.toJson())
+          .timeout(const Duration(seconds: 3))
+          .then((response) {
+        return response.statusCode;
+      }).catchError((onError) {
+        return 408;
+      });
 
   Future<List<Sale>> postAll(List<Sale> _sales) async {
-    List<int> indexs = [];
+    List<Sale> failedPost = [];
     for (Sale sale in _sales) {
-      indexs.add(await post(sale));
-    }
-    
-    for (var i = 0; i < indexs.length; i++) {
-      if (indexs[i] == 201) {
-        _sales.removeAt(i);
+      var response = await post(sale);
+      if (response != 201) {
+        failedPost.add(sale);
       }
     }
-    return _sales;
+    return failedPost;
   }
 }
 

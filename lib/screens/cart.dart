@@ -220,7 +220,30 @@ class _CartTotal extends StatelessWidget {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text("Transaksi Berhasil"),
+                                content: Text(
+                                  "Berhasil 😄",
+                                  style: Theme.of(context).textTheme.headline,
+                                ),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text("Tutup"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: Text(
+                                  "Terjadi Kesalahan ☹️",
+                                  style: Theme.of(context).textTheme.headline,
+                                ),
                                 actions: <Widget>[
                                   FlatButton(
                                     child: Text("Tutup"),

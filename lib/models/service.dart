@@ -9,24 +9,24 @@ part 'service.g.dart';
 class ServiceModel {
   var _url = 'http://192.168.1.6/api/services/services/';
 
-  Future<int> post(Service service) async {
-    var response = await http.post(_url,
-        headers: {'Authorization': basicAuth}, body: service.toJson());
-    return response.statusCode;
-  }
+  Future<int> post(Service service) async => await http
+          .post(_url,
+              headers: {'Authorization': basicAuth}, body: service.toJson())
+          .then((response) {
+        return response.statusCode;
+      }).catchError((onError) {
+        return 408;
+      });
 
   Future<List<Service>> postAll(List<Service> _services) async {
-    List<int> indexs = [];
+    List<Service> failedPost = [];
     for (Service service in _services) {
-      indexs.add(await post(service));
-    }
-    
-    for (var i = 0; i < indexs.length; i++) {
-      if (indexs[i] == 201) {
-        _services.removeAt(i);
+      var response = await post(service);
+      if (response != 201) {
+        failedPost.add(service);
       }
     }
-    return _services;
+    return failedPost;
   }
 }
 

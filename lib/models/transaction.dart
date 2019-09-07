@@ -9,24 +9,25 @@ part 'transaction.g.dart';
 class TransactionModel {
   var _url = 'http://192.168.1.6/api/pulsa/transactions/';
 
-  Future<int> post(Transaction transaction) async {
-    var response = await http.post(_url,
-        headers: {'Authorization': basicAuth}, body: transaction.toJson());
-    return response.statusCode;
-  }
+  Future<int> post(Transaction transaction) async => await http
+          .post(_url,
+              headers: {'Authorization': basicAuth}, body: transaction.toJson())
+          .timeout(const Duration(seconds: 3))
+          .then((response) {
+        return response.statusCode;
+      }).catchError((onError) {
+        return 408;
+      });
 
   Future<List<Transaction>> postAll(List<Transaction> _transactions) async {
-    List<int> indexs = [];
+    List<Transaction> failedPost = [];
     for (Transaction transaction in _transactions) {
-      indexs.add(await post(transaction));
-    }
-
-    for (var i = 0; i < indexs.length; i++) {
-      if (indexs[i] == 201) {
-        _transactions.removeAt(i);
+      var response = await post(transaction);
+      if (response != 201) {
+        failedPost.add(transaction);
       }
     }
-    return _transactions;
+    return failedPost;
   }
 }
 
