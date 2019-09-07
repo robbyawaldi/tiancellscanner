@@ -8,7 +8,5 @@ part of 'transaction.dart';
 
 Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
     <String, dynamic>{
-      'cost': instance.cost.toString(),
-      'price': instance.price.toString(),
-      'nominal': instance.nominal.toString()
+      'nominal': instance.nominal.id.toString()
     };

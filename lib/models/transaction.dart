@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:tiancell/models/auth.dart';
 
 import 'cart.dart';
+import 'nominal.dart';
 
 part 'transaction.g.dart';
 
@@ -23,6 +24,7 @@ class TransactionModel {
     List<Transaction> failedPost = [];
     for (Transaction transaction in _transactions) {
       var response = await post(transaction);
+      print(response);
       if (response != 201) {
         failedPost.add(transaction);
       }
@@ -36,9 +38,7 @@ class Transaction implements CartList {
   Transaction();
 
   String name;
-  num cost;
-  num price;
-  num nominal;
+  Nominal nominal;
 
   Map<String, dynamic> toJson() => _$TransactionToJson(this);
 }

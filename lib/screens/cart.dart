@@ -77,7 +77,7 @@ class _CartList extends StatelessWidget {
               );
             else if (item is Transaction)
               return Text(
-                '${rupiah(item.price).formattedLeftSymbol}',
+                '${rupiah(item.nominal.price).formattedLeftSymbol}',
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -221,7 +221,7 @@ class _CartTotal extends StatelessWidget {
                             builder: (context) {
                               return AlertDialog(
                                 content: Text(
-                                  "Berhasil 😄",
+                                  "Transaksi berhasil 😉",
                                   style: Theme.of(context).textTheme.headline,
                                 ),
                                 actions: <Widget>[
@@ -241,7 +241,7 @@ class _CartTotal extends StatelessWidget {
                             builder: (context) {
                               return AlertDialog(
                                 content: Text(
-                                  "Terjadi Kesalahan ☹️",
+                                  "Terjadi kesalahan ☹️",
                                   style: Theme.of(context).textTheme.headline,
                                 ),
                                 actions: <Widget>[

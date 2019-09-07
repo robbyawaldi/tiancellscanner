@@ -19,9 +19,7 @@ class CartModel extends ChangeNotifier {
   void addTransaction(Provider provider, Nominal nominal) {
     Transaction transaction = Transaction()
       ..name = '${provider.name} ${nominal.name}'
-      ..cost = nominal.cost
-      ..price = nominal.price
-      ..nominal = nominal.id;
+      ..nominal = nominal;
     list.add(transaction);
     notifyListeners();
   }
@@ -96,7 +94,7 @@ class CartModel extends ChangeNotifier {
         if (current is Sale) {
           return total + current.subtotal;
         } else if (current is Transaction) {
-          return total + current.price;
+          return total + current.nominal.price;
         } else if (current is Service) {
           return total + current.price;
         } else {
