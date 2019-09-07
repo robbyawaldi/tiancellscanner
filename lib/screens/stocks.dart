@@ -54,8 +54,8 @@ class _StockCardState extends State<StockCard> {
                     // Item name
                     Text(
                       _item.name.toUpperCase(),
-                      style: TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     // Item price
                     Text(
@@ -83,10 +83,11 @@ class _StockCardState extends State<StockCard> {
                           ),
                         ),
                         // Add button
-                        FlatButton(
+                        FlatButton.icon(
+                          icon: Icon(Icons.add),
                           color: Colors.orange[600],
                           textColor: Colors.white,
-                          child: Text('Tambah ke Keranjang'),
+                          label: Text('Tambah ke Keranjang'),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0)),
                           onPressed: _item.stock < 1 ||
@@ -121,7 +122,8 @@ class _StockCardState extends State<StockCard> {
     return FutureBuilder<List<Item>>(
       future: ItemModel().items(),
       builder: (BuildContext context, AsyncSnapshot<List<Item>> snapshot) {
-        if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+        if (!snapshot.hasData)
+          return Center(child: CircularProgressIndicator());
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -168,7 +170,7 @@ class _StockCardState extends State<StockCard> {
       children: <Widget>[
         Text(
           'Jumlah',
-          style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+          style: TextStyle(fontSize: 18, color: Colors.grey[700]),
         ),
         Expanded(
           child: SizedBox(
@@ -180,13 +182,15 @@ class _StockCardState extends State<StockCard> {
           color: Colors.black,
           onPressed: minus,
           splashColor: Colors.white,
+          iconSize: 28,
         ),
-        Text('$_qty', style: new TextStyle(fontSize: 14.0)),
+        Text('$_qty', style: new TextStyle(fontSize: 18.0)),
         IconButton(
           onPressed: add,
           icon: Icon(Icons.add),
           color: Colors.black,
           splashColor: Colors.white,
+          iconSize: 28,
         ),
       ],
     );

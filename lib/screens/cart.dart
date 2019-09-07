@@ -104,7 +104,7 @@ class _CartList extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         'Jumlah',
-                        style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                        style: TextStyle(fontSize: 18, color: Colors.grey[700]),
                       ),
                       Expanded(
                         child: SizedBox(
@@ -116,13 +116,15 @@ class _CartList extends StatelessWidget {
                         color: Colors.black,
                         onPressed: () => cart.minusQtyItem(index),
                         splashColor: Colors.white,
+                        iconSize: 28,
                       ),
-                      Text('${item.qty}', style: new TextStyle(fontSize: 14.0)),
+                      Text('${item.qty}', style: new TextStyle(fontSize: 18.0)),
                       IconButton(
                         onPressed: () => cart.addQtyItem(index),
                         icon: Icon(Icons.add),
                         color: Colors.black,
                         splashColor: Colors.white,
+                        iconSize: 28,
                       ),
                     ],
                   ),
@@ -133,7 +135,7 @@ class _CartList extends StatelessWidget {
           }
 
           return SizedBox(
-            height: item is Sale ? 151 : 100,
+            height: item is Sale ? 160 : 100,
             child: Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),

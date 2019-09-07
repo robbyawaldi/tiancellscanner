@@ -64,10 +64,11 @@ class _PulsaCardState extends State<PulsaCard> {
                             ),
                           ),
                           // Add button
-                          FlatButton(
+                          FlatButton.icon(
+                            icon: Icon(Icons.add),
                             color: Colors.orange[600],
                             textColor: Colors.white,
-                            child: Text('Tambah ke Keranjang'),
+                            label: Text('Tambah ke Keranjang'),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0)),
                             onPressed: () {
@@ -97,7 +98,8 @@ class _PulsaCardState extends State<PulsaCard> {
     return FutureBuilder<List<Provider>>(
       future: ProviderModel().providers(),
       builder: (BuildContext context, AsyncSnapshot<List<Provider>> snapshot) {
-        if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+        if (!snapshot.hasData)
+          return Center(child: CircularProgressIndicator());
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

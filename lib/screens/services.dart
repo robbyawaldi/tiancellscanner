@@ -121,7 +121,8 @@ class _ServiceCardState extends State<ServiceCard> {
                   SizedBox(
                     width: double.infinity,
                     height: 50,
-                    child: FlatButton(
+                    child: FlatButton.icon(
+                      icon: Icon(Icons.add),
                       color: Colors.orange[600],
                       textColor: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -149,7 +150,7 @@ class _ServiceCardState extends State<ServiceCard> {
                           );
                         }
                       },
-                      child: Text('Tambah ke keranjang'),
+                      label: Text('Tambah ke keranjang'),
                     ),
                   ),
                 ],
