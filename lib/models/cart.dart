@@ -16,10 +16,11 @@ class CartModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addTransaction(Provider provider, Nominal nominal) {
+  void addTransaction(Provider provider, Nominal nominal, String number) {
     Transaction transaction = Transaction()
-      ..name = '${provider.name} ${nominal.name}'
-      ..nominal = nominal;
+      ..provider = provider
+      ..nominal = nominal
+      ..number = number;
     list.add(transaction);
     notifyListeners();
   }

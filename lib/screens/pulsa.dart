@@ -4,6 +4,7 @@ import 'package:qr_utils/qr_utils.dart';
 import 'package:tiancell/models/cart.dart';
 import 'package:tiancell/models/nominal.dart';
 import 'package:tiancell/models/provider.dart';
+import 'package:tiancell/models/transaction.dart';
 
 import 'format.dart';
 
@@ -17,13 +18,15 @@ class PulsaCard extends StatefulWidget {
 class _PulsaCardState extends State<PulsaCard> {
   Provider _provider;
   Nominal _nominal;
+  final _formKey = GlobalKey<FormState>();
+  var numberField = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     var cart = Prov.Provider.of<CartModel>(context);
 
     return SizedBox(
-      height: _nominal != null ? 165 : 140,
+      height: _nominal != null ? 220 : 140,
       child: Card(
         child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -46,7 +49,28 @@ class _PulsaCardState extends State<PulsaCard> {
                             fontWeight: FontWeight.bold,
                             color: Colors.orange),
                       ),
-                      Expanded(child: SizedBox()),
+                      Expanded(
+                        child: Form(
+                          key: _formKey,
+                          child: TextFormField(
+                            controller: numberField,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: 'Nomor',
+                              labelStyle: TextStyle(color: Colors.grey),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value.length > 15) {
+                                return 'Panjang nomor melebihi 15 karakter';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
@@ -72,18 +96,21 @@ class _PulsaCardState extends State<PulsaCard> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0)),
                             onPressed: () {
-                              cart.addTransaction(_provider, _nominal);
-                              setState(() {
-                                _provider = null;
-                                _nominal = null;
-                              });
-                              Scaffold.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      'Transaksi pulsa berhasil ditambahkan ke keranjang'),
-                                  duration: Duration(seconds: 1),
-                                ),
-                              );
+                              if (_formKey.currentState.validate()) {
+                                cart.addTransaction(
+                                    _provider, _nominal, numberField.text);
+                                setState(() {
+                                  _provider = null;
+                                  _nominal = null;
+                                });
+                                Scaffold.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        'Transaksi pulsa berhasil ditambahkan ke keranjang'),
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
+                              }
                             },
                           )
                         ],
@@ -103,7 +130,22 @@ class _PulsaCardState extends State<PulsaCard> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Pulsa', style: Theme.of(context).textTheme.headline),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Pulsa', style: Theme.of(context).textTheme.headline),
+                FutureBuilder<Transaction>(
+                  future: TransactionModel().latestTransaction(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (!snapshot.hasData) return Center();
+                    return Text(
+                      '${snapshot.data.number}',
+                      style: TextStyle(color: Colors.grey),
+                    );
+                  },
+                )
+              ],
+            ),
             SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

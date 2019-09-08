@@ -41,4 +41,5 @@ class Item {
     num currentpurchase;
     
     factory Item.fromJson(Map<String,dynamic> json) => _$ItemFromJson(json);
+    Map<String, dynamic> toJson() => _$ItemToJson(this);
 }

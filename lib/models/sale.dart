@@ -47,5 +47,6 @@ class Sale implements CartList {
   @override
   bool operator ==(Object other) => other is Item && other.id == this.item.id;
 
-  Map<String, dynamic> toJson() => _$SaleToJson(this);
+  factory Sale.fromJson(Map<String,dynamic> json) => _$SaleFromJson(json);
+    Map<String, dynamic> toJson() => _$SaleToJson(this);
 }

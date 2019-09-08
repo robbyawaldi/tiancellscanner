@@ -14,3 +14,11 @@ Item _$ItemFromJson(Map<String, dynamic> json) {
     ..stock = json['stock'] as num
     ..currentpurchase = json['currentpurchase'] as num;
 }
+
+Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'price': instance.price,
+      'stock': instance.stock,
+      'currentpurchase': instance.currentpurchase
+    };

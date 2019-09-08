@@ -14,3 +14,11 @@ Nominal _$NominalFromJson(Map<String, dynamic> json) {
     ..cost = json['cost'] as num
     ..price = json['price'] as num;
 }
+
+Map<String, dynamic> _$NominalToJson(Nominal instance) => <String, dynamic>{
+      'id': instance.id,
+      'provider': instance.provider,
+      'name': instance.name,
+      'cost': instance.cost,
+      'price': instance.price
+    };

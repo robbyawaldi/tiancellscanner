@@ -30,4 +30,5 @@ class Nominal {
     num price;
     
     factory Nominal.fromJson(Map<String,dynamic> json) => _$NominalFromJson(json);
+    Map<String, dynamic> toJson() => _$NominalToJson(this);
 }
