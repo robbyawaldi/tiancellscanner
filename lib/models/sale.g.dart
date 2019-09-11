@@ -15,4 +15,4 @@ Sale _$SaleFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$SaleToJson(Sale instance) =>
-    <String, dynamic>{'item': instance.item, 'qty': instance.qty};
+    <String, dynamic>{'purchase': instance.item.currentpurchase.toString(), 'qty': instance.qty.toString()};
